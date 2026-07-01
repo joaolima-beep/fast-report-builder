@@ -14,7 +14,60 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      laudos: {
+        Row: {
+          created_at: string
+          document_type: string
+          generated_content: string
+          id: string
+          patient_name: string
+          raw_notes: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          document_type: string
+          generated_content: string
+          id?: string
+          patient_name: string
+          raw_notes: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          document_type?: string
+          generated_content?: string
+          id?: string
+          patient_name?: string
+          raw_notes?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          created_at: string
+          email: string | null
+          full_name: string | null
+          id: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          email?: string | null
+          full_name?: string | null
+          id: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          email?: string | null
+          full_name?: string | null
+          id?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
