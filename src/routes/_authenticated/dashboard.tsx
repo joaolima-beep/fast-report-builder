@@ -197,9 +197,7 @@ function Dashboard() {
             ) : (
               <div className="flex h-full flex-col items-center justify-center text-center text-muted-foreground">
                 <FileText className="mb-3 h-8 w-8 opacity-50" />
-                <p className="text-sm">
-                  O laudo formatado aparecerá aqui após a geração.
-                </p>
+                <p className="text-sm">O laudo formatado aparecerá aqui após a geração.</p>
               </div>
             )}
           </div>

@@ -19,12 +19,24 @@ function Landing() {
             <span className="text-lg font-bold tracking-tight">Fast Laudo</span>
           </Link>
           <nav className="hidden items-center gap-8 md:flex">
-            <a href="#beneficios" className="text-sm text-muted-foreground hover:text-foreground">Benefícios</a>
-            <a href="#como-funciona" className="text-sm text-muted-foreground hover:text-foreground">Como funciona</a>
-            <a href="#precos" className="text-sm text-muted-foreground hover:text-foreground">Preços</a>
+            <a href="#beneficios" className="text-sm text-muted-foreground hover:text-foreground">
+              Benefícios
+            </a>
+            <a
+              href="#como-funciona"
+              className="text-sm text-muted-foreground hover:text-foreground"
+            >
+              Como funciona
+            </a>
+            <a href="#precos" className="text-sm text-muted-foreground hover:text-foreground">
+              Preços
+            </a>
           </nav>
           <div className="flex items-center gap-2">
-            <Link to="/auth" className="text-sm font-medium text-muted-foreground hover:text-foreground">
+            <Link
+              to="/auth"
+              className="text-sm font-medium text-muted-foreground hover:text-foreground"
+            >
               Entrar
             </Link>
             <Link to="/auth">
@@ -46,15 +58,19 @@ function Landing() {
             Laudos técnicos em minutos, <span className="text-primary">com precisão clínica.</span>
           </h1>
           <p className="mx-auto mt-6 max-w-2xl text-lg text-muted-foreground">
-            Transforme suas anotações de sessão em laudos, pareceres e relatórios de evolução formatados,
-            com linguagem técnica adequada e prontos para entrega.
+            Transforme suas anotações de sessão em laudos, pareceres e relatórios de evolução
+            formatados, com linguagem técnica adequada e prontos para entrega.
           </p>
           <div className="mt-8 flex flex-wrap justify-center gap-3">
             <Link to="/auth">
-              <Button size="lg" className="shadow-[var(--shadow-glow)]">Criar Conta Grátis</Button>
+              <Button size="lg" className="shadow-[var(--shadow-glow)]">
+                Criar Conta Grátis
+              </Button>
             </Link>
             <a href="#precos">
-              <Button size="lg" variant="outline">Ver preços</Button>
+              <Button size="lg" variant="outline">
+                Ver preços
+              </Button>
             </a>
           </div>
           <p className="mt-4 text-xs text-muted-foreground">
@@ -67,11 +83,26 @@ function Landing() {
       <section id="beneficios" className="mx-auto max-w-6xl px-6 py-20">
         <div className="grid gap-6 md:grid-cols-3">
           {[
-            { icon: Clock, title: "Economize horas por semana", desc: "O que levava 40 minutos, agora leva 2." },
-            { icon: Brain, title: "Linguagem clínica adequada", desc: "IA treinada para redação técnica em psicologia." },
-            { icon: ShieldCheck, title: "Seus dados protegidos", desc: "Histórico privado, acessível apenas por você." },
+            {
+              icon: Clock,
+              title: "Economize horas por semana",
+              desc: "O que levava 40 minutos, agora leva 2.",
+            },
+            {
+              icon: Brain,
+              title: "Linguagem clínica adequada",
+              desc: "IA treinada para redação técnica em psicologia.",
+            },
+            {
+              icon: ShieldCheck,
+              title: "Seus dados protegidos",
+              desc: "Histórico privado, acessível apenas por você.",
+            },
           ].map((b) => (
-            <div key={b.title} className="rounded-2xl border border-border bg-card p-6 shadow-[var(--shadow-soft)]">
+            <div
+              key={b.title}
+              className="rounded-2xl border border-border bg-card p-6 shadow-[var(--shadow-soft)]"
+            >
               <div className="grid h-11 w-11 place-items-center rounded-xl bg-primary-soft text-primary">
                 <b.icon className="h-5 w-5" />
               </div>
@@ -91,8 +122,16 @@ function Landing() {
           </p>
           <div className="mt-10 grid gap-6 md:grid-cols-3">
             {[
-              { n: "01", t: "Cole suas anotações", d: "Digite ou cole as anotações brutas da sessão." },
-              { n: "02", t: "Escolha o tipo", d: "Relatório de Evolução, Parecer ou Laudo Técnico." },
+              {
+                n: "01",
+                t: "Cole suas anotações",
+                d: "Digite ou cole as anotações brutas da sessão.",
+              },
+              {
+                n: "02",
+                t: "Escolha o tipo",
+                d: "Relatório de Evolução, Parecer ou Laudo Técnico.",
+              },
               { n: "03", t: "Gere e exporte", d: "Copie o texto ou exporte em PDF." },
             ].map((s) => (
               <div key={s.n} className="rounded-2xl border border-border bg-card p-6">
@@ -137,7 +176,9 @@ function Landing() {
               ))}
             </ul>
             <Link to="/auth" className="mt-8 block">
-              <Button size="lg" className="w-full">Criar Conta Grátis</Button>
+              <Button size="lg" className="w-full">
+                Criar Conta Grátis
+              </Button>
             </Link>
           </div>
         </div>

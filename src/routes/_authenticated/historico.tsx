@@ -4,14 +4,23 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
-  Table, TableBody, TableCell, TableHead, TableHeader, TableRow,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
 } from "@/components/ui/table";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import {
-  Dialog, DialogContent, DialogHeader, DialogTitle,
-} from "@/components/ui/dialog";
-import {
-  AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent,
-  AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle,
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { Eye, Trash2, FileText } from "lucide-react";
@@ -60,9 +69,7 @@ function Historico() {
     <div className="p-6 lg:p-8">
       <div className="mb-6">
         <h1 className="text-2xl font-bold tracking-tight">Histórico de Pacientes</h1>
-        <p className="text-sm text-muted-foreground">
-          Todos os laudos que você já gerou.
-        </p>
+        <p className="text-sm text-muted-foreground">Todos os laudos que você já gerou.</p>
       </div>
 
       <div className="rounded-2xl border border-border bg-card shadow-[var(--shadow-soft)]">
@@ -91,7 +98,9 @@ function Historico() {
                   <TableCell className="font-medium">{l.patient_name}</TableCell>
                   <TableCell className="text-muted-foreground">{l.document_type}</TableCell>
                   <TableCell className="text-muted-foreground">
-                    {format(new Date(l.created_at), "dd 'de' MMM, yyyy 'às' HH:mm", { locale: ptBR })}
+                    {format(new Date(l.created_at), "dd 'de' MMM, yyyy 'às' HH:mm", {
+                      locale: ptBR,
+                    })}
                   </TableCell>
                   <TableCell className="text-right">
                     <div className="flex justify-end gap-1">
@@ -108,12 +117,15 @@ function Historico() {
                           <AlertDialogHeader>
                             <AlertDialogTitle>Excluir documento?</AlertDialogTitle>
                             <AlertDialogDescription>
-                              Esta ação não pode ser desfeita. O laudo de {l.patient_name} será removido permanentemente.
+                              Esta ação não pode ser desfeita. O laudo de {l.patient_name} será
+                              removido permanentemente.
                             </AlertDialogDescription>
                           </AlertDialogHeader>
                           <AlertDialogFooter>
                             <AlertDialogCancel>Cancelar</AlertDialogCancel>
-                            <AlertDialogAction onClick={() => onDelete(l.id)}>Excluir</AlertDialogAction>
+                            <AlertDialogAction onClick={() => onDelete(l.id)}>
+                              Excluir
+                            </AlertDialogAction>
                           </AlertDialogFooter>
                         </AlertDialogContent>
                       </AlertDialog>

@@ -20,8 +20,10 @@ export async function callLovableAI(params: {
 
   if (!res.ok) {
     const text = await res.text().catch(() => "");
-    if (res.status === 429) throw new Error("Limite de requisições excedido. Tente novamente em instantes.");
-    if (res.status === 402) throw new Error("Créditos de IA insuficientes. Adicione créditos ao workspace.");
+    if (res.status === 429)
+      throw new Error("Limite de requisições excedido. Tente novamente em instantes.");
+    if (res.status === 402)
+      throw new Error("Créditos de IA insuficientes. Adicione créditos ao workspace.");
     throw new Error(`Falha na IA (${res.status}): ${text}`);
   }
 

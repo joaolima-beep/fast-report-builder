@@ -92,9 +92,7 @@ function Configuracoes() {
       </div>
 
       <div className="mt-6 max-w-xl rounded-2xl border border-destructive/30 bg-card p-6">
-        <h2 className="text-sm font-semibold uppercase tracking-wide text-destructive">
-          Conta
-        </h2>
+        <h2 className="text-sm font-semibold uppercase tracking-wide text-destructive">Conta</h2>
         <p className="mt-2 text-sm text-muted-foreground">Encerrar sua sessão neste dispositivo.</p>
         <div className="mt-4">
           <Button variant="outline" onClick={signOut}>
