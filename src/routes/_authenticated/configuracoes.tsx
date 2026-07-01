@@ -17,6 +17,7 @@ function Configuracoes() {
   const queryClient = useQueryClient();
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
+  const [crp, setCrp] = useState("");
   const [saving, setSaving] = useState(false);
 
   useEffect(() => {
@@ -26,10 +27,11 @@ function Configuracoes() {
       setEmail(data.user.email ?? "");
       const { data: profile } = await supabase
         .from("profiles")
-        .select("full_name")
+        .select("full_name, crp")
         .eq("id", data.user.id)
         .maybeSingle();
       setName(profile?.full_name ?? "");
+      setCrp(profile?.crp ?? "");
     })();
   }, []);
 
@@ -39,7 +41,7 @@ function Configuracoes() {
     if (!u.user) return;
     const { error } = await supabase
       .from("profiles")
-      .upsert({ id: u.user.id, email, full_name: name });
+      .upsert({ id: u.user.id, email, full_name: name, crp });
     setSaving(false);
     if (error) toast.error(error.message);
     else toast.success("Perfil atualizado.");
@@ -69,12 +71,21 @@ function Configuracoes() {
             <Input id="name" value={name} onChange={(e) => setName(e.target.value)} />
           </div>
           <div className="space-y-1.5">
+            <Label htmlFor="crp">Numero do CRP</Label>
+            <Input
+              id="crp"
+              value={crp}
+              onChange={(e) => setCrp(e.target.value)}
+              placeholder="Ex.: 06/123456"
+            />
+          </div>
+          <div className="space-y-1.5">
             <Label htmlFor="email">E-mail</Label>
             <Input id="email" value={email} disabled />
           </div>
           <div className="flex justify-end gap-2 pt-2">
             <Button onClick={save} disabled={saving}>
-              {saving ? "Salvando..." : "Salvar alterações"}
+              {saving ? "Salvando..." : "Salvar alteracoes"}
             </Button>
           </div>
         </div>

@@ -12,28 +12,45 @@ const GenerateInput = z.object({
 
 export const generateLaudo = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((data: unknown) => GenerateInput.parse(data))
+  .validator((data: unknown) => GenerateInput.parse(data))
   .handler(async ({ data, context }) => {
     const { callLovableAI } = await import("./ai-gateway.server");
+
+    const { data: profile } = await context.supabase
+      .from("profiles")
+      .select("full_name, crp")
+      .eq("id", context.userId)
+      .maybeSingle();
+
+    const psychologistName = profile?.full_name || "[Nome do Psicologo]";
+    const psychologistCrp = profile?.crp || "[CRP]";
 
     const systemPrompt = `Você é um psicólogo clínico experiente redigindo documentos técnicos em português do Brasil.
 Escreva com linguagem formal, técnica e ética, seguindo diretrizes do Conselho Federal de Psicologia (Resolução CFP 06/2019).
 Estruture claramente o documento com títulos e seções apropriadas ao tipo solicitado.
 Nunca invente dados; se algo faltar nas anotações, use termos genéricos como "conforme relato" ou omita.
 Nunca faça diagnósticos definitivos além do que as anotações permitirem.
-Retorne apenas o corpo do documento formatado (sem comentários introdutórios).`;
+Retorne apenas o corpo do documento formatado (sem comentários introdutórios).
+
+IMPORTANTE: No cabecalho do documento, SEMPRE inclua:
+- Nome do psicólogo: ${psychologistName}
+- CRP: ${psychologistCrp}
+
+Use EXATAMENTE esses valores no cabecalho, sem alteracoes.`;
 
     const structureByType: Record<string, string> = {
       "Relatório de Evolução":
-        "Estrutura: Identificação; Período de acompanhamento; Demanda inicial; Evolução do quadro; Intervenções realizadas; Considerações e encaminhamentos.",
+        "Estrutura: Identificação (incluindo nome e CRP do psicólogo); Período de acompanhamento; Demanda inicial; Evolução do quadro; Intervenções realizadas; Considerações e encaminhamentos.",
       "Parecer Psicológico":
-        "Estrutura: Identificação; Demanda e objetivo do parecer; Análise psicológica; Conclusão parcial.",
+        "Estrutura: Identificação (incluindo nome e CRP do psicólogo); Demanda e objetivo do parecer; Análise psicológica; Conclusão parcial.",
       "Laudo Técnico":
-        "Estrutura: Identificação; Demanda; Procedimentos utilizados; Análise; Conclusão; Encaminhamentos.",
+        "Estrutura: Identificação (incluindo nome e CRP do psicólogo); Demanda; Procedimentos utilizados; Análise; Conclusão; Encaminhamentos.",
     };
 
     const userPrompt = `Tipo de documento: ${data.documentType}
 Paciente: ${data.patientName}
+Psicólogo responsável: ${psychologistName}
+CRP: ${psychologistCrp}
 ${structureByType[data.documentType]}
 
 Anotações brutas da sessão:
@@ -41,7 +58,7 @@ Anotações brutas da sessão:
 ${data.rawNotes}
 """
 
-Gere o ${data.documentType.toLowerCase()} completo, formatado em texto simples com títulos de seção em MAIÚSCULAS.`;
+Gere o ${data.documentType.toLowerCase()} completo, formatado em texto simples com títulos de seção em MAIÚSCULAS. Inclua no cabecalho os dados do psicólogo fornecidos acima.`;
 
     const content = await callLovableAI({
       model: "google/gemini-3-flash-preview",
@@ -82,7 +99,7 @@ export const listLaudos = createServerFn({ method: "GET" })
 
 export const deleteLaudo = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((data: unknown) => z.object({ id: z.string().uuid() }).parse(data))
+  .validator((data: unknown) => z.object({ id: z.string().uuid() }).parse(data))
   .handler(async ({ data, context }) => {
     const { error } = await context.supabase.from("laudos").delete().eq("id", data.id);
     if (error) throw new Error(error.message);

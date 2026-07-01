@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { useState } from "react";
+import { jsPDF } from "jspdf";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
@@ -12,7 +13,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Loader2, Sparkles, Copy, Download, FileText } from "lucide-react";
+import { Loader as Loader2, Sparkles, Copy, Download, FileText } from "lucide-react";
 import { toast } from "sonner";
 import { generateLaudo } from "@/lib/laudos.functions";
 import { useQueryClient } from "@tanstack/react-query";
@@ -63,13 +64,43 @@ function Dashboard() {
 
   const exportPdf = () => {
     if (!output) return;
-    const w = window.open("", "_blank");
-    if (!w) return;
-    const safe = output.replace(/</g, "&lt;");
-    w.document.write(`<!doctype html><html><head><meta charset="utf-8"><title>${documentType} - ${patientName}</title>
-      <style>body{font-family:Georgia,serif;max-width:720px;margin:40px auto;padding:0 24px;line-height:1.6;color:#1a1a2e;white-space:pre-wrap}h1{font-size:18px;text-align:center;margin-bottom:24px;text-transform:uppercase}</style>
-      </head><body><h1>${documentType}</h1>${safe}<script>window.onload=()=>window.print()</script></body></html>`);
-    w.document.close();
+
+    const doc = new jsPDF({
+      orientation: "portrait",
+      unit: "mm",
+      format: "a4",
+    });
+
+    const pageWidth = doc.internal.pageSize.getWidth();
+    const margin = 20;
+    const maxWidth = pageWidth - margin * 2;
+
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(14);
+    doc.text(documentType, pageWidth / 2, 25, { align: "center" });
+
+    doc.setFont("helvetica", "normal");
+    doc.setFontSize(10);
+    doc.text(`Paciente: ${patientName}`, margin, 35);
+
+    doc.setFontSize(11);
+    const lines = doc.splitTextToSize(output, maxWidth);
+    let y = 45;
+    const lineHeight = 6;
+    const pageHeight = doc.internal.pageSize.getHeight();
+
+    for (const line of lines) {
+      if (y > pageHeight - margin) {
+        doc.addPage();
+        y = margin;
+      }
+      doc.text(line, margin, y);
+      y += lineHeight;
+    }
+
+    const fileName = `${documentType.replace(/\s+/g, "_")}_${patientName.replace(/\s+/g, "_")}.pdf`;
+    doc.save(fileName);
+    toast.success("PDF exportado com sucesso.");
   };
 
   return (
